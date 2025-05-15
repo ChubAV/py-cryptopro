@@ -58,7 +58,5 @@ RUN apt remove cmake build-essential libboost-all-dev python3-dev curl vim git a
     && rm -r /dist \
     && rm -rf /var/lib/apt/lists/*
 
-# COPY    loop.py /application/loop.py
-# CMD ["python3","loop.py"]
 
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080", "--reload"]
