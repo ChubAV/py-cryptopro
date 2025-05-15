@@ -50,7 +50,7 @@ class SubjectSchema(BaseModel):
         title="Title -> должность владельца сертификата в указанной (O) организации",
         default=None,
     )
-    O: str | None = Field(
+    O: str | None = Field(  # noqa: E741
         title="OrganizationName -> наименование организации владельца сертификата",
         default=None,
     )  # noqa: E741
