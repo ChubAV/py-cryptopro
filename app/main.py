@@ -1,9 +1,7 @@
-from typing import Callable, Any
 from contextlib import asynccontextmanager
 from contextvars import ContextVar
-import uuid
 from injector import Injector
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from logging import Logger
 
