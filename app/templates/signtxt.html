@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+
+</style>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>Подписать простой текст</h1>
+    </div>
+</div>
+<div class="row mt-4"></div>
+    <div class="col">
+        <select class="form-select" id="format-sign">
+            <option  selected value=0>Отсоединенная подпись в строке</option>
+            <option  value=1>Присоединенная подпись в строке</option>
+
+          </select>
+    </div>
+</div>
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Отпечаток сертификата</span>
+        <input type="text" class="form-control" id="thumbprint" name="thumbprint" value="78BE8AA78ACEB248352CBCC8276D004AC12EC369">
+        </div>
+    </div>
+    <div class="col-12">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Текст</span>
+        <input type="text" class="form-control" id="data" name="data" value="Привет мир!">
+        </div>
+    </div>
+    <div class="col-12">
+        <button id="mainButton" type="button" class="btn btn-success"
+            hx-post="{{backend_url}}/api/sign/s2s/"
+            hx-trigger="click"  hx-target="#result" hx-swap="innerHTML"
+            {% if api_key %}
+                hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+            {% endif %}
+        >
+            Сервер
+        </button>
+        <button id="client1" class="btn btn-primary">
+            Плагин
+        </button>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <code id="result"></code>
+        <input type="hidden" name="hresult" id="hresult"/>
+    </div>
+</div>
+
+<div class="row mt-3"></div>
+    <div class="col">
+        <div id="result_client"></div>
+    </div>
+</div>
+<div class="row mt-3"></div>
+    <div class="col">
+        <div id="result_client_ex"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}
+<script>
+
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        const result_json = JSON.parse(evt.detail.elt.innerHTML)
+        evt.detail.elt.innerHTML = JSON.stringify(result_json, null, 4)
+        evt.detail.elt.innerText = JSON.stringify(result_json, null, 4)
+        document.getElementById("hresult").value = result_json.details
+    });
+</script>
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+            const format_sign = document.getElementById("format-sign").value
+            if (format_sign == 0) {
+                    evt.detail.path="{{backend_url}}/api/sign/s2s/"
+            } else if (format_sign == 1) {
+                    evt.detail.path="{{backend_url}}/api/sign/s/"
+            } else if (format_sign == 2) {
+
+            }
+            
+            evt.detail.parameters['data'] =  document.getElementById("data").value // add a new parameter into the mix
+            evt.detail.parameters['thumbprint'] =  document.getElementById("thumbprint").value // add a new parameter into the mix
+    });
+</script>
+<script language="javascript" src="{{ url_for('static', path='js/signtxt.js') }}"></script>
+{% endblock %}

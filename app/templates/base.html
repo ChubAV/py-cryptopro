@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Крипто Про</title>
+    <link href="{{ url_for('static', path='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', path='css/main.css') }}" rel="stylesheet">
+    
+    
+    <script language="javascript" src="{{ url_for('static', path='js/cadesplugin/es6-promise.min.js') }}"></script>
+    <script language="javascript" src="{{ url_for('static', path='js/cadesplugin/ie_eventlistner_polyfill.js') }}"></script>
+
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+    <header>
+      {% include 'includes/menu.html' %}
+    </header>
+    <main class="container">
+      
+      {% block content %}{% endblock %}
+      <hr/>
+      {% include 'includes/settings.html' %}
+      
+    </main>
+    
+    <footer>
+
+    </footer>
+
+    <script src="{{ url_for('static', path='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', path='js/htmx.min.js') }}"></script>
+    {% block footer %}{% endblock %}
+
+</body>
+</html>

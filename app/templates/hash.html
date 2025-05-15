@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col">
+        <h1>Вычисление ХЭША</h1>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                        Вычисление Хеша на основе текста
+                    </button>
+                </h2>
+                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="container" style="min-height:600px">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="basic-addon1">Вх. данные (текст)</span>
+                                        <input type="text" class="form-control" id="data" name="text"
+                                            value="Привет Мир!">
+                                        <button id="server_txt" hx-post="{{backend_url}}/api/hash/txt/"
+                                            hx-include="[name='text']" hx-target="#result_server_txt"
+                                            hx-swap="innerHTML" class="btn btn-success"
+                                            {% if api_key %}
+                                                hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+                                            {% endif %}
+                                            >
+                                            Сервер
+                                        </button>
+                                            <span class="input-group-text" id="basic-addon1">/</span>
+                                        <button id="client_txt" class="btn btn-primary">
+                                            Плагин
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <code id="result_server_txt"></code>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <code id="result_client_txt"></code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        Вычисление Хеша на основе файла
+                    </button>
+                </h2>
+                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                   
+                                        <form id='form' 
+                                        hx-encoding='multipart/form-data'
+                                        hx-post='{{backend_url}}/api/hash/file/'
+                                        hx-swap="innerHTML"
+                                        hx-target="#result_server_file"
+                                        {% if api_key %}
+                                            hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+                                        {% endif %}
+                                        >
+                                        <div class="input-group mb-3">
+                                            <input type="file" class="form-control" id="file" name="file">
+                                            <button id="server_file" class="btn btn-success">Сервер</button>
+                                            <span class="input-group-text">/</span>
+                                            <button id="client_file" class="btn btn-primary">
+                                                Плагин
+                                            </button>
+                                        </div>
+                                        </form>
+                                  
+
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <code id="result_server_file"></code>
+                                </div>
+                            </div>
+                            <div class="row mt-4">
+                                <div class="col">
+                                    <code id="result_client_file"></code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+{% block footer %}
+<script>
+
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        evt.detail.elt.innerHTML = JSON.stringify(JSON.parse(evt.detail.elt.innerHTML), null, 4)
+        evt.detail.elt.innerText = JSON.stringify(JSON.parse(evt.detail.elt.innerText), null, 4)
+
+    });
+</script>
+<script language="javascript" src="{{ url_for('static', path='js/hash.js') }}"></script>
+
+{% endblock %}

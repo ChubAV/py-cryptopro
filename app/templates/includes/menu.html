@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-md mb-4">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+          {% for item in menu  %}
+          {% if item.submenu | length > 0 %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              {{ item.name }}
+            </a>
+            <ul class="dropdown-menu">
+              {% for subitem in item.submenu %}
+                <li>
+                  {% if subitem.slag == current_page %}
+                  <a class="dropdown-item active" aria-current="page" href="{{subitem.href}}">{{subitem.name}}</a>
+                  {% else %}
+                  <a class="dropdown-item" href="{{subitem.href}}">{{subitem.name}}</a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+            </li>
+          {% else %}
+            <li class="nav-item">
+              {% if item.slag == current_page %}
+                <a class="nav-link active" aria-current="page" href="{{item.href}}">{{ item.name }}</a>
+              {% else %}
+                <a class="nav-link"  href="{{item.href}}">{{ item.name }}</a>
+              {% endif %}
+            </li>
+            {% endif %}
+          
+            {% endfor %}
+
+        </ul>
+
+      </div>
+    </div>
+  </nav>

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<h1>Подпись простого текста</h1>
+<div class="row mt-4">
+    <div class="col">
+        <select class="form-select" id="format-sign">
+            <option  selected value=0>Отсоединенная подпись</option>
+            <option  value=1>Присоединенная</option>
+        </select>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <div class="input-group mb-3">
+            <span class="input-group-text">Вх. данные (текст)</span>
+            <input type="text" class="form-control" id="data" name="text"
+                value="Привет Мир!">
+        
+            <button id="client1" class="btn btn-primary">
+                Плагин
+            </button>
+            <span class="input-group-text">/</span>
+            <button class="btn btn-success"
+                hx-post='{{backend_url}}/api/verify/s2s/'
+                hx-swap="innerHTML"
+                hx-target="#result_server_file"
+                {% if api_key %}
+                    hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+                {% endif %}
+            >
+                Сервер
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<select size="8" name="CertListBox" id="CertListBox" class="user_input" style="width:100%"></select>
+
+<textarea id="sign1" class="mt-4" style="width:100%" rows="10"></textarea>
+<code id="result_server_file" class="mt-4"></code>
+
+{% endblock %}
+
+{% block footer %}
+
+<script language="javascript" src="{{ url_for('static', path='js/verifytxt.js') }}"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        const format_sign = document.getElementById("format-sign").value
+
+          if (format_sign == 0){
+            evt.detail.path="{{backend_url}}/api/verify/s2s/"
+            evt.detail.parameters['data'] =  document.getElementById("data").value // add a new parameter into the mix
+            evt.detail.parameters['sign'] =  document.getElementById("sign1").value // add a new parameter into the mix
+    
+        } else {
+             evt.detail.path="{{backend_url}}/api/verify/s/"
+             evt.detail.parameters['data'] =  document.getElementById("sign1").value // add a new parameter into the mix
+
+        }
+
+    });
+</script>
+{% endblock %}

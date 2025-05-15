@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<h1>Подпись XML файла</h1>
+
+
+<div class="row mt-4">
+    <div class="col">
+        <select size="8" name="CertListBox" id="CertListBox" class="user_input" style="width:100%"></select>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <input type="file" class="form-control" id="filein" name="filein">
+    </div>
+    <div class="col">
+        <button id="client1" class="btn btn-primary">
+            Плагин
+        </button>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <input type="file" class="form-control" id="fileout" name="fileout" style="display:block;">
+         <textarea id="strout" style="width:100%; display:none;"></textarea>
+    </div>
+    <div class="col">
+        <button class="btn btn-success"
+        hx-encoding='multipart/form-data'
+        hx-post='{{backend_url}}/api/verify/xml2f/'
+        hx-swap="innerHTML"
+        hx-target="#result_server_file"
+        {% if api_key %}
+            hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+        {% endif %}
+    >
+    Сервер
+    </button>
+    
+    </div>
+</div>
+
+
+
+
+<code id="result_server_file" class="mt-4"></code>
+
+{% endblock %}
+
+{% block footer %}
+
+<script language="javascript" src="{{ url_for('static', path='js/verifyxml.js') }}"></script>
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+            evt.detail.parameters['file'] =  document.getElementById("fileout").files[0];
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+    .dot {
+        height: 10px;
+        width: 10px;
+        background-color: #d8d8d8;
+        border-radius: 50%;
+        display: inline-block;
+        margin-right: 6px;
+    }
+
+    .green {
+        background-color: #59bd2a;
+    }
+
+    .red {
+        background-color: #e83127;
+    }
+
+    .yellow {
+        background-color: #face48;
+    }
+    li.descr:empty {
+        display: none;
+    }
+    .error {
+        color: red;
+        font-weight: bold;
+    }
+</style>
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>Плагин КриптоПро</h1>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col">
+        <button id="mainButton" type="button" class="btn btn-success">
+            Диагностика
+        </button>
+
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+<div class="edge">
+    <div id="csp_msg" style="text-align:left;">
+        <p>
+            <span class="dot red" id="ExtensionEnabledImg"></span><span id="ExtensionEnabledTxt">Расширение не
+                загружено</span>
+            <span id="ExtensionSolution"></span>
+        </p>
+        <p>
+            <span class="dot" id="PluginEnabledImg"></span><span id="PluginEnabledTxt">Плагин: ожидание загрузки
+                расширения</span>
+            <span id="PluginSolution"></span>
+        </p>
+        <p>
+            <span class="dot" id="CspEnabledImg"></span><span id="CspEnabledTxt">КриптоПро CSP: ожидание загрузки
+                плагина</span>
+            <span id="CspSolution"></span>
+        </p>
+        <p>
+            <span class="dot" id="ObjectsLoadedImg"></span><span id="ObjectsLoadedTxt">Объекты плагина: ожидание
+                загрузки провайдера</span>
+            <span id="ObjectsSolution"></span>
+        </p>
+        <div class="edge"></div>
+
+        <ul class="descr">
+            <li class="descr" id="ExtVersionTxt" lang="ru"></li>
+            <li class="descr" id="PlugInVersionTxt" lang="ru"></li>
+            <li class="descr" id="CSPVersionTxt" lang="ru"></li>
+            <li class="descr" id="CSPNameTxt" lang="ru"></li>
+            <li class="descr" id="ExtStoreTxt" lang="ru"></li>
+            <li class="descr" id="Platform"></li>
+            <li class="descr" id="UserAgent"></li>
+            <li class="descr" id="CspLicense"></li>
+            <li class="descr" id="TspLicense"></li>
+            <li class="descr" id="OcspLicense"></li>
+        </ul>
+    </div>
+</div>
+
+</div>
+</div>
+
+<div class="row">
+    <div class="col">
+<select size="8" name="CertListBox" id="CertListBox" class="user_input" style="display:none">
+</select>
+</div></div>
+
+<div class="row my-3">
+    <div class="col">
+<div id="cert_info" class="edge" name="CertInfo" style="display:none">
+    <h2>Информация о сертификате</h2>
+    <p class="info_field_limited" id="subject"></p>
+    <p class="info_field_limited" id="issuer"></p>
+    <p class="info_field" id="from"></p>
+    <p class="info_field" id="till"></p>
+    <p class="info_field_limited" id="provname"></p>
+    <p class="info_field_limited"  id="privateKeyLink"></p>
+    <p class="info_field" id="algorithm"></p>
+    <p class="info_field" id="status"></p>
+    <p class="info_field" id="location"></p>
+    <p class="info_field" id="certlicense"></p>
+</div>
+</div></div>
+{% endblock %}
+
+{% block footer %}
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin.js') }}"></script>
+{% endblock %}

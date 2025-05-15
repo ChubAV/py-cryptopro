@@ -1,0 +1,15 @@
+
+services:
+  app:
+    image: py-crypto:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./app:/application/app
+      - ./tests:/application/tests
+      - ./certificates:/application/certificates
+      - ./secretkeys:/application/secretkeys
+      - ./logs:/application/logs
+    env_file:
+      - ./.env
+

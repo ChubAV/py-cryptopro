@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/utils.js') }}"></script>
+
+<script language="javascript" src="{{ url_for('static', path='js/cadesplugin/cadesplugin_api.js') }}"></script>
+
+{% endblock %}
+
+{% block content %}
+<h1>Подпись файла</h1>
+
+<div class="row mt-4">
+    <div class="col">
+        <select class="form-select" id="format-sign">
+            <option  selected value=0>Отсоединенная подпись в файле</option>
+            <option  value=1>Отсоединенная подпись в строке</option>
+            <option value=2>Присоединенная подпись в файле</option>
+          </select>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <select size="8" name="CertListBox" id="CertListBox" class="user_input" style="width:100%"></select>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <input type="file" class="form-control" id="filein" name="filein">
+    </div>
+    <div class="col">
+        <button id="client1" class="btn btn-primary">
+            Плагин
+        </button>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col">
+        <input type="file" class="form-control" id="fileout" name="fileout" style="display:block;">
+         <textarea id="strout" style="width:100%; display:none;"></textarea>
+    </div>
+    <div class="col">
+        <button class="btn btn-success"
+        hx-encoding='multipart/form-data'
+        hx-post='{{backend_url}}/api/verify/f2f/'
+        hx-swap="innerHTML"
+        hx-target="#result_server_file"
+        {% if api_key %}
+            hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+        {% endif %}
+    >
+    Сервер
+    </button>
+    
+    </div>
+</div>
+
+
+
+
+<code id="result_server_file" class="mt-4"></code>
+
+{% endblock %}
+
+{% block footer %}
+
+<script language="javascript" src="{{ url_for('static', path='js/verifyfile.js') }}"></script>
+<script>
+    
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        const format_sign = document.getElementById("format-sign")
+        if (format_sign.value == 0) {
+            evt.detail.parameters['file'] =  document.getElementById("filein").files[0];
+            evt.detail.parameters['sign'] =  document.getElementById("fileout").files[0];
+            evt.detail.path="{{backend_url}}/api/verify/f2f/"
+        
+          } else if (format_sign.value == 1) {
+            evt.detail.parameters['file'] =  document.getElementById("filein").files[0];
+            evt.detail.parameters['sign'] =  document.getElementById("strout").value;
+            evt.detail.path="{{backend_url}}/api/verify/f2s/"
+          }  else if (format_sign.value == 2) {
+            evt.detail.parameters['file'] =  document.getElementById("fileout").files[0];
+            evt.detail.path="{{backend_url}}/api/verify/f/"
+
+          }  else if (format_sign.value == 3) {
+
+          }
+
+
+
+    });
+
+</script>
+{% endblock %}

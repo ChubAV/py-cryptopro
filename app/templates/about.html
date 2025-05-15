@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>О сервере</h1>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <button type="button" class="btn btn-success"
+            hx-get="/api/systeminfo/"
+            hx-trigger="click"
+            hx-target="#result" hx-swap="innerHTML"
+            {% if api_key %}
+                hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+            {% endif %}
+            >
+            Запросить у сервера
+
+        </button>
+    </div>
+</div>
+<div class="row mt-4">
+    <div class="col">
+        <code id="result"></code>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+{% block footer %}
+<script>
+
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        evt.detail.elt.innerHTML = JSON.stringify(JSON.parse(evt.detail.elt.innerHTML), null, 4)
+        evt.detail.elt.innerText = JSON.stringify(JSON.parse(evt.detail.elt.innerText), null, 4)
+
+    });
+
+</script>
+{% endblock %}

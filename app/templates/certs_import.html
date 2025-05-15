@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+
+</style>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col">
+        <h1>Импортировать сертификат на сервер</h1>
+    </div>
+</div>
+
+<div class="row mt-2">
+    <div class="col-12">
+        <div class="input-group mb-3">
+            <span class="input-group-text"  style="min-width: 115px;">Хранилище</span>
+            <select class="form-select" id="store" style="max-width: 300px;">
+                <option  selected value="Root">Корневые сертификаты</option>
+                <option  value="Ca">Промежуточные сертификаты</option>
+                <option  value="My">Личные сертификаты</option>
+
+
+            </select>
+        </div>
+    </div>
+    <div class="col-12">
+            <label for="filein" class="form-label">Файл сертификата</label>
+            <input type="file" class="form-control" id="filein" name="filein" style="max-width: 410px;" placeholder="Файл сертификата">
+    </div>
+    <div class="col-12 mt-4">
+        <button id="mainButton" type="button" class="btn btn-success"
+            hx-post="{{backend_url}}/api/certificates/"
+            hx-encoding='multipart/form-data'
+            hx-trigger="click"  hx-target="#result" hx-swap="innerHTML"
+            {% if api_key %}
+                hx-headers='js:{"X-API-Key": document.getElementById("api_key").value}'
+            {% endif %}
+        >
+            Запрос
+        </button>
+    </div>
+</div>
+
+<div class="row mt-3">
+    <div class="col">
+        <code id="result"></code>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block footer %}
+<script>
+
+    document.body.addEventListener('htmx:afterSwap', function (evt) {
+        evt.detail.elt.innerHTML = JSON.stringify(JSON.parse(evt.detail.elt.innerHTML), null, 4)
+        evt.detail.elt.innerText = JSON.stringify(JSON.parse(evt.detail.elt.innerText), null, 4)
+
+    });
+</script>
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+        evt.detail.parameters['file'] =  document.getElementById("filein").files[0];
+        evt.detail.parameters['store'] =  document.getElementById("store").value;
+
+
+    });
+</script>
+{% endblock %}

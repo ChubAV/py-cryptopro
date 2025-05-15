@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+ Original XML doc file for sign example. 
+--> 
+<Envelope xmlns="urn:envelope">
+  <Data>
+	Hello, World!
+  </Data>
+  <Node xml:id="nodeID">
+	Hello, Node!
+  </Node>
+</Envelope>
