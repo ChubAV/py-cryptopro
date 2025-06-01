@@ -79,7 +79,8 @@ def wrapper_hash_object(
     if isinstance(data, bytes):
         sBase64 = data_to_base64(data)
     else:
-        sBase64 = data
+        # sBase64 = data
+        sBase64 = text_to_base64(data)
 
     hashedData = pycades.HashedData()
     hashedData.Algorithm = algorithm
@@ -88,6 +89,7 @@ def wrapper_hash_object(
         hashedData.DataEncoding = pycades.CADESCOM_BASE64_TO_BINARY
         hashedData.Hash(sBase64)
     elif isinstance(data, str) and not not_data:
+        hashedData.DataEncoding = pycades.CADESCOM_BASE64_TO_BINARY
         hashedData.Hash(sBase64)
     else:
         hashedData.SetHashValue(data)
