@@ -342,6 +342,7 @@ def parse_sing(signed_data) -> SingSchema:
         version=str(cert1.Version),
         store=StoreName("All"),
         has_private_key=cert1.HasPrivateKey(),
+        certificate=cert1.Export(0),
     )
     sing_schema = SingSchema(singer=cert_schema, date_sign=date_sign1)
     return sing_schema

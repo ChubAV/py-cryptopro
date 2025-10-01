@@ -99,7 +99,7 @@ class CertificateSchema(BaseModel):
     version: str
     has_private_key: bool = False
     store: StoreName
-    # certificate: Optional[str] = None
+    certificate: str | None = None
 
     @classmethod
     def parsing_data_certificate(cls, data: str) -> SubjectSchema:
